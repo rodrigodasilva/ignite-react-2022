@@ -3,7 +3,7 @@
 Repositório utilizado para armazenar e documentar os projetos e desafios desenvolvidos durante o Ignite 2022 da Rocketseat.
 
 ## Desafios 
-___
+
 ## Desafio 01 - Praticando os conceitos do ReactJS
 ![alt text](/banners/desafio-01.png)
 
