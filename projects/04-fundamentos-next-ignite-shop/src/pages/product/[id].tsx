@@ -1,8 +1,9 @@
+import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/future/image";
-import Stripe from "stripe";
+import { useState } from "react";
+import Stripe from "stripe"; 
 import { stripe } from "../../lib/stripe";
-
 import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product"
 
 interface ProductProps {
@@ -11,14 +12,30 @@ interface ProductProps {
     name: string
     imageUrl: string
     price: string
-    description: string,
+    description: string
     defaultPriceId: string
   }
 }
 
 export default function Product({ product }: ProductProps) {
-  function handleBuyButton() {
-    console.log(product.defaultPriceId);
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false);
+
+  async function handleBuyButton() {
+    try {
+      setIsCreatingCheckoutSession(true);
+
+      const response = await axios.post('/api/checkout', {
+        priceId: product.defaultPriceId,
+      })
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl;
+    } catch (err) {
+      setIsCreatingCheckoutSession(false);
+
+      alert('Falha ao redirecionar ao checkout!')
+    }
   }
 
   return (
@@ -30,8 +47,10 @@ export default function Product({ product }: ProductProps) {
       <ProductDetails>
         <h1>{product.name}</h1>
         <span>{product.price}</span>
+
         <p>{product.description}</p>
-        <button onClick={handleBuyButton}>
+
+        <button disabled={isCreatingCheckoutSession} onClick={handleBuyButton}>
           Comprar agora
         </button>
       </ProductDetails>
@@ -42,7 +61,7 @@ export default function Product({ product }: ProductProps) {
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [
-      { params: { id: 'prod_MZ8ZTA4vhv8xMe' }}
+      { params: { id: 'prod_MLH5Wy0Y97hDAC' } },
     ],
     fallback: 'blocking',
   }
@@ -53,7 +72,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
 
   const product = await stripe.products.retrieve(productId, {
     expand: ['default_price']
-  }); 
+  });
 
   const price = product.default_price as Stripe.Price;
 
