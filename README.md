@@ -14,7 +14,22 @@ Loja de camisas utilizando pagamento integrado com API da Stripe
 * Axios
 * Keen-slider
 * Stripe
-* Typescript 
+* Typescript
+
+## Projeto 05 - Design System
+![alt text](/banners/projeto-05.png)
+
+### 🛠️ Utilizamos
+
+* React
+* Turbo Repo
+* Storybook
+* Vite
+* Stitches
+* Radix
+* Phosphor
+* Typescript
+
 
 ## Desafio 01 - Praticando os conceitos do ReactJS
 ![alt text](/banners/desafio-01.png)
